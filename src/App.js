@@ -9,8 +9,26 @@ import Navbar from './components/Navbar';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import AuthRoute from './util/AuthRoute';
+import JwtDecode from 'jwt-decode';
+import { logoutUser, getUserData } from './redux/user/user.action';
+import { SET_AUTHENTICATED } from './redux/types';
+import Axios from 'axios';
 
-const theme = createMuiTheme(themeFile)
+const theme = createMuiTheme(themeFile);
+
+const token = localStorage.FBIdToken;
+if(token) {
+  const decodedToken = JwtDecode(token);
+  if(decodedToken.exp * 1000 < Date.now()) {
+    store.dispatch(logoutUser());
+    window.location.href = '/login'
+  } else {
+    store.dispatch({ type: SET_AUTHENTICATED });
+    Axios.defaults.headers.common['Authorization'] = token;
+    store.dispatch(getUserData());
+  }
+}
 
 function App() {
   return (
@@ -22,8 +40,8 @@ function App() {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={Home}/>
-                <Route exact path="/login" component={Login}/>
-                <Route exact path="/signup" component={SignUp}/>
+                <AuthRoute exact path="/login" component={Login}/>
+                <AuthRoute exact path="/signup" component={SignUp}/>
               </Switch>
             </div>
           </Router>

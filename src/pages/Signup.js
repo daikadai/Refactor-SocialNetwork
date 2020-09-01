@@ -3,12 +3,14 @@ import AppIcon from "../images/icon.png";
 import { withStyles, Grid, TextField, Typography, Button, CircularProgress } from '@material-ui/core'
 import Axios from 'axios'
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { signupUser } from '../redux/user/user.action';
 
 const styles = theme => ({
   ...theme.spreadThis
 })
 
-const Signup = ({ history, classes }) => {
+const Signup = ({ history, classes, UI: { loading, errors}, signupUser  }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,24 +20,11 @@ const Signup = ({ history, classes }) => {
 
   const { email, password, confirmPassword, handle } = formData;
 
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-
   const handleSubmit = async e => {
     e.preventDefault();
 
-    setLoading(true);
-
-    try {
-      const res = await Axios.post('/signup', formData);
-      console.log(res.data);
-      localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
-      setLoading(false)
-      history.push('/')
-    } catch (error) {
-      setErrors(error.response.data);
-      setLoading(false);
-    }
+    signupUser(formData, history)
+   
   }
 
   const handleChange = e => {
@@ -126,4 +115,8 @@ const Signup = ({ history, classes }) => {
   )
 }
 
-export default withStyles(styles)(Signup);
+const mapStateToProps = state => ({
+  UI: state.UI
+})
+
+export default connect(mapStateToProps, {signupUser})(withStyles(styles)(Signup));
