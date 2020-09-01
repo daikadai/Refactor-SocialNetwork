@@ -1,6 +1,8 @@
 import React from 'react'
 import { withStyles, Card, CardMedia, Typography, CardContent } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import dayjs from 'dayjs'
+import  relativeTime  from 'dayjs/plugin/relativeTime';
 
 const styles = {
   card: {
@@ -16,6 +18,8 @@ const styles = {
   }
 }
 
+dayjs.extend(relativeTime);
+
 const Scream = ({ classes, scream: { body, createdAt, userImage, userHandle, screamId, likeCount, commentCount }}) => {
   return (
     <Card className={classes.card}>
@@ -24,7 +28,7 @@ const Scream = ({ classes, scream: { body, createdAt, userImage, userHandle, scr
         <Typography variant="h5" component={Link} to={`/users/${userHandle}`}  color="primary">
           {userHandle}
         </Typography>
-        <Typography variant="body2" color="textSecondary">{createdAt}</Typography>
+        <Typography variant="body2" color="textSecondary">{dayjs(createdAt).fromNow()}</Typography>
         <Typography variant="body1">{body}</Typography>
       </CardContent>
     </Card>
