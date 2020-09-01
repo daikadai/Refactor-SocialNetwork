@@ -7,25 +7,29 @@ import Login from './pages/Login';
 import SignUp from './pages/Signup';
 import Navbar from './components/Navbar';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 const theme = createMuiTheme(themeFile)
 
 function App() {
   return (
-    <MuiThemeProvider theme={theme}>
-      <div className="App">
-        <Router>
-          <Navbar />
-          <div className="container">
-            <Switch>
-              <Route exact path="/" component={Home}/>
-              <Route exact path="/login" component={Login}/>
-              <Route exact path="/signup" component={SignUp}/>
-            </Switch>
-          </div>
-        </Router>
-      </div>
-    </MuiThemeProvider>
+    <Provider store={store}>
+      <MuiThemeProvider theme={theme}>
+        <div className="App">
+          <Router>
+            <Navbar />
+            <div className="container">
+              <Switch>
+                <Route exact path="/" component={Home}/>
+                <Route exact path="/login" component={Login}/>
+                <Route exact path="/signup" component={SignUp}/>
+              </Switch>
+            </div>
+          </Router>
+        </div>
+      </MuiThemeProvider>
+    </Provider>
   );
 }
 
