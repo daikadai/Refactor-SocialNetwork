@@ -2,10 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withStyles, Paper, Typography, Button, Tooltip, IconButton } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link';
-import {LocationOn, CalendarToday, Edit} from '@material-ui/icons';
+import {LocationOn, CalendarToday, Edit, KeyboardReturn} from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { uploadImage } from '../redux/user/user.action';
+import { uploadImage, logoutUser } from '../redux/user/user.action';
+import EditDetail from './EditDetail';
 
 const styles = (theme) => ({
   paper: {
@@ -62,7 +63,8 @@ const Profile = ({
     loading,
     authenticated
   },
-  uploadImage
+  uploadImage,
+  logoutUser
 }) => {
   const handleImageChange = e => {
     const image = e.target.files[0];
@@ -122,7 +124,13 @@ const Profile = ({
               <span>
                 Joined {dayjs(createdAt).format('MMM YYY')}
               </span>
-            </div>           
+            </div>    
+            <Tooltip title="Edit profile picture" placement="top">
+                <IconButton onClick={() => logoutUser()} className="button">
+                  <KeyboardReturn color="primary"/>
+                </IconButton>
+            </Tooltip>      
+            <EditDetail /> 
           </div>
         </Paper>
       ) : (
@@ -148,4 +156,4 @@ const mapStateToProps = state => ({
   user: state.user
 })
 
-export default connect(mapStateToProps, {uploadImage})(withStyles(styles)(Profile));
+export default connect(mapStateToProps, {uploadImage, logoutUser})(withStyles(styles)(Profile));

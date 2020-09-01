@@ -62,6 +62,16 @@ export const uploadImage = formData => async dispatch => {
   }
 }
 
+export const editUserDetails = userDetails => async dispatch => {
+  dispatch({ type: LOADING_USER });
+  try {
+    await Axios.post('/user', userDetails);
+    dispatch(getUserData());
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const setAuthorizationHeader = token => {
   const FBIdToken = `Bearer ${token}`;
   localStorage.setItem('FBIdToken', `Bearer ${token}`);
