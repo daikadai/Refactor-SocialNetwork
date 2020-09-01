@@ -1,4 +1,4 @@
-import { LOADING_UI, CLEAR_ERRORS, SET_USER, SET_ERRORS, SET_UNAUTHENTICATED } from "../types"
+import { LOADING_UI, CLEAR_ERRORS, SET_USER, SET_ERRORS, SET_UNAUTHENTICATED, LOADING_USER } from "../types"
 import Axios from "axios";
 
 export const loginUser = (formData, history) => async dispatch => {
@@ -40,6 +40,7 @@ export const logoutUser = () => dispatch => {
 }
 
 export const getUserData = () => async dispatch => {
+  dispatch({ type: LOADING_USER })
   try {
     const res = await Axios.get('/user');
     dispatch({
@@ -48,6 +49,16 @@ export const getUserData = () => async dispatch => {
     })
   } catch (error) {
     console.log(error);
+  }
+}
+
+export const uploadImage = formData => async dispatch => {
+  dispatch({ type: LOADING_USER });
+  try {
+    await Axios.post('/user/image', formData);
+    dispatch(getUserData());
+  } catch (error) {
+    console.log(error)
   }
 }
 

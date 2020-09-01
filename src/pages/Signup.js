@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import AppIcon from "../images/icon.png";
 import { withStyles, Grid, TextField, Typography, Button, CircularProgress } from '@material-ui/core'
-import Axios from 'axios'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signupUser } from '../redux/user/user.action';
