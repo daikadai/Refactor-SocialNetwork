@@ -1,11 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 import { editUserDetails } from '../redux/user/user.action';
-import EditIcon from "@material-ui/icons/Edit";
 import {
   withStyles,
-  Tooltip,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -15,6 +12,8 @@ import {
 } from "@material-ui/core"
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
+import MyButton from '../util/MyButton';
+import { Edit } from '@material-ui/icons';
 
 const styles = theme => ({
   ...theme.spreadThis,
@@ -66,11 +65,9 @@ const EditDetail = ({credentials, editUserDetails, classes }) => {
 
   return (
     <>
-      <Tooltip title="Edit Details" placement="top">
-        <IconButton onClick={handleOpen} className={classes.button}>
-          <EditIcon color="primary"/>
-        </IconButton>
-      </Tooltip>
+      <MyButton tip="Edit Details" onClick={handleOpen} btnClassName={classes.button}>
+          <Edit color="primary" />
+      </MyButton>
       <Dialog
         open={open}
         onClose={handleClose}

@@ -1,59 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withStyles, Paper, Typography, Button, Tooltip, IconButton } from '@material-ui/core'
+import { withStyles, Paper, Typography, Button } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link';
 import {LocationOn, CalendarToday, Edit, KeyboardReturn} from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { uploadImage, logoutUser } from '../redux/user/user.action';
 import EditDetail from './EditDetail';
+import MyButton from '../util/MyButton';
+import ProfileSkeleton from '../util/ProfileSkeleton';
 
 const styles = (theme) => ({
-  paper: {
-    padding: 20
-  },
-  profile: {
-    '& .image-wrapper': {
-      textAlign: 'center',
-      position: 'relative',
-      '& button': {
-        position: 'absolute',
-        top: '80%',
-        left: '70%'
-      }
-    },
-    '& .profile-image': {
-      width: 200,
-      height: 200,
-      objectFit: 'cover',
-      maxWidth: '100%',
-      borderRadius: '50%'
-    },
-    '& .profile-details': {
-      textAlign: 'center',
-      '& span, svg': {
-        verticalAlign: 'middle'
-      },
-      '& a': {
-        color: theme.palette.primary.main
-      }
-    },
-    '& hr': {
-      border: 'none',
-      margin: '0 0 10px 0'
-    },
-    '& svg.button': {
-      '&:hover': {
-        cursor: 'pointer'
-      }
-    }
-  },
-  buttons: {
-    textAlign: 'center',
-    '& a': {
-      margin: '20px 10px'
-    }
-  }
+  ...theme.spreadThis
 })
 
 const Profile = ({ 
@@ -80,24 +38,22 @@ const Profile = ({
     fileInput.click();
   }
   return (
-    loading ? <p>loading...</p> : (
+    loading ? <ProfileSkeleton /> : (
       authenticated ? (
         <Paper className={classes.paper}>
           <div className={classes.profile}>
             <div className="image-wrapper">
               <img src={imageUrl} alt="profile" className="profile-image"/>
               <input type="file" id="imageInput" onChange={handleImageChange} hidden="hidden"/>
-              <Tooltip title="Edit profile picture" placement="top">
-                <IconButton onClick={handleEditPicture} className="button">
-                  <Edit color="primary"/>
-                </IconButton>
-              </Tooltip>
+              <MyButton tip="Edit profile picture" onClick={handleEditPicture} btnClassName="button">
+                <Edit color="primary"/>
+              </MyButton>
             </div>
             <hr/>
             <div className="profile-details">
-              <LinkIcon component={Link} to={`/users/${handle}`} color="primary" variant="h5">
+              <Typography component={Link} to={`/users/${handle}`} color="primary" variant="h5">
                 @ {handle}
-              </LinkIcon>
+              </Typography>
               <hr/>
               { bio && <Typography variant="body2">{bio}</Typography>}
               <hr/>
@@ -125,11 +81,9 @@ const Profile = ({
                 Joined {dayjs(createdAt).format('MMM YYY')}
               </span>
             </div>    
-            <Tooltip title="Edit profile picture" placement="top">
-                <IconButton onClick={() => logoutUser()} className="button">
-                  <KeyboardReturn color="primary"/>
-                </IconButton>
-            </Tooltip>      
+            <MyButton tip="Logout" onClick={() => logoutUser()} btnClassName="button">
+              <KeyboardReturn color="primary" />
+            </MyButton> 
             <EditDetail /> 
           </div>
         </Paper>

@@ -4,12 +4,13 @@ import { withStyles, Grid, TextField, Typography, Button, CircularProgress } fro
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signupUser } from '../redux/user/user.action';
+import { useEffect } from 'react';
 
 const styles = theme => ({
   ...theme.spreadThis
 })
 
-const Signup = ({ history, classes, UI: { loading, errors}, signupUser  }) => {
+const Signup = ({ history, classes, UI, signupUser  }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,7 +19,13 @@ const Signup = ({ history, classes, UI: { loading, errors}, signupUser  }) => {
   })
 
   const { email, password, confirmPassword, handle } = formData;
+  const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    if(UI.errors) {
+      setErrors(UI.errors);
+    }
+  },[UI.errors])
   const handleSubmit = async e => {
     e.preventDefault();
 
@@ -98,10 +105,10 @@ const Signup = ({ history, classes, UI: { loading, errors}, signupUser  }) => {
               variant="contained"
               color="primary"
               className={classes.button}
-              disabled={loading}
+              disabled={UI.loading}
             >
               Sign Up
-              { loading && (
+              { UI.loading && (
                 <CircularProgress size={30} className={classes.progress}/>
               )}
             </Button>
